@@ -20,7 +20,12 @@ def departmentApi(request, id=0):
         else:
             departments = Departments.objects.filter(DepartmentId=id)
             department_serializer = DepartmentSerializer(departments, many=True)
-            return JsonResponse(department_serializer.data, safe=False)
+            response = JsonResponse(department_serializer.data, safe=False)
+            if not isinstance(response, dict):
+                return JsonResponse("NO DATA FOUND",safe=False)
+            else:
+                return JsonResponse(department_serializer.data, safe=False)
+            
 
 
     elif request.method == 'POST':
