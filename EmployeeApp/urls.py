@@ -2,6 +2,7 @@ from django.conf.urls import url
 from EmployeeApp import views
 from django.urls import path
 from .views import departmentApi
+from .view import employeeApi
 
 from django.conf.urls.static import static
 from django.conf import settings
