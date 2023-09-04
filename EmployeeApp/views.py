@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.views.decorators.csrf import  csrf_exempt
 from rest_framework.parsers import JSONParser
 from django.http.response import JsonResponse
+import json
 
 from EmployeeApp.models import Departments,Employee
 from  EmployeeApp.serializers import DepartmentSerializer,EmployeeSerializer
@@ -21,7 +22,8 @@ def departmentApi(request, id=0):
             departments = Departments.objects.filter(DepartmentId=id)
             department_serializer = DepartmentSerializer(departments, many=True)
             response = JsonResponse(department_serializer.data, safe=False)
-            if not isinstance(response, dict):
+            response_data = json.loads(response.content)
+            if not response_data:
                 return JsonResponse("NO DATA FOUND",safe=False)
             else:
                 return JsonResponse(department_serializer.data, safe=False)
@@ -52,11 +54,22 @@ def departmentApi(request, id=0):
 
 
 @csrf_exempt
-def employeeApi(request,id):
+def employeeApi(request,id=0):
     if request.method == 'GET':
-        employees = Employee.objects.all()
-        employee_serializer = EmployeeSerializer(employees,many=True)
-        return  JsonResponse(employee_serializer.data,safe=False)
+        if id == 0:
+            employees = Employee.objects.all()
+            employee_serializer = EmployeeSerializer(employees,many=True)
+            return  JsonResponse(employee_serializer.data,safe=False)
+        else:
+            employees = Employee.objects.filter(EmployeeId=id)
+            employee_serializer = EmployeeSerializer(employees, many=True)
+            response = JsonResponse(employee_serializer.data, safe=False)
+            response_data = json.loads(response.content)
+            if not response_data:
+                return JsonResponse("NO DATA FOUND",safe=False)
+            else:
+                return JsonResponse(employee_serializer.data, safe=False)
+            
 
     elif request.method == 'POST':
         employees_data = JSONParser().parse(request)
