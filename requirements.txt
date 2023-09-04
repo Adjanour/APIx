@@ -1,6 +1,6 @@
 ﻿asgiref==3.7.2
-Django==2.1.15
-django-cors-headers==2.1.15
+Django==3.2
+django-cors-headers== 3.2.1
 djangorestframework==3.14.0
 psycopg2==2.9.7
 pytz==2023.3
